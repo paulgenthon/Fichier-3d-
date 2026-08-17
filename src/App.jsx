@@ -1,189 +1,3 @@
-############################################################
-# FICHIER : package.json
-# (cree un nouveau fichier sur GitHub avec exactement ce nom/chemin)
-############################################################
-
-{
-  "name": "depot-stl",
-  "private": true,
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.45.4",
-    "lucide-react": "^0.383.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.13",
-    "vite": "^5.4.8"
-  }
-}
-
-
-############################################################
-# FICHIER : vite.config.js
-# (cree un nouveau fichier sur GitHub avec exactement ce nom/chemin)
-############################################################
-
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-
-export default defineConfig({
-  plugins: [react()],
-});
-
-
-############################################################
-# FICHIER : tailwind.config.js
-# (cree un nouveau fichier sur GitHub avec exactement ce nom/chemin)
-############################################################
-
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ["./index.html", "./src/**/*.{js,jsx}"],
-  theme: {
-    extend: {
-      fontFamily: {
-        display: ["'Space Grotesk'", "sans-serif"],
-        sans: ["Inter", "sans-serif"],
-        mono: ["'JetBrains Mono'", "monospace"],
-      },
-      fontWeight: {
-        600: "600",
-        700: "700",
-      },
-    },
-  },
-  plugins: [],
-};
-
-
-############################################################
-# FICHIER : postcss.config.js
-# (cree un nouveau fichier sur GitHub avec exactement ce nom/chemin)
-############################################################
-
-export default {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-};
-
-
-############################################################
-# FICHIER : index.html
-# (cree un nouveau fichier sur GitHub avec exactement ce nom/chemin)
-############################################################
-
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dépôt.stl — Bibliothèque de modèles 3D</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
-
-
-############################################################
-# FICHIER : src/main.jsx
-# (cree un nouveau fichier sur GitHub avec exactement ce nom/chemin)
-############################################################
-
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
-import "./index.css";
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-
-
-############################################################
-# FICHIER : src/index.css
-# (cree un nouveau fichier sur GitHub avec exactement ce nom/chemin)
-############################################################
-
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-thumb {
-  background: #2a2f3a;
-  border-radius: 4px;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.fade-up {
-  animation: fadeUp 0.35s ease both;
-}
-
-.bp-grid {
-  background-image: linear-gradient(rgba(90, 141, 239, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(90, 141, 239, 0.06) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
-
-
-############################################################
-# FICHIER : src/supabaseClient.js
-# (cree un nouveau fichier sur GitHub avec exactement ce nom/chemin)
-############################################################
-
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn(
-    "Variables Supabase manquantes : vérifie ton fichier .env.local (voir README.md)"
-  );
-}
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-export const MODELS_BUCKET = "models";
-export const IMAGES_BUCKET = "images";
-export const MODELS_TABLE = "models";
-
-
-############################################################
-# FICHIER : src/App.jsx
-# (cree un nouveau fichier sur GitHub avec exactement ce nom/chemin)
-############################################################
-
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   Search,
@@ -578,4 +392,94 @@ function UploadModal({ onClose, onDone }) {
       <div className="bg-[#171A21] border border-[#2A2F3A] rounded-sm max-w-lg w-full max-h-[88vh] overflow-y-auto fade-up">
         <div className="flex items-center justify-between px-6 pt-6">
           <h2 className="font-display text-lg font-700 text-[#F4F6F9]">Publier un fichier 3D</h2>
-          <button onClick={onClose} className="text-[#5C6472] hover:text-[#EDEFF
+          <button onClick={onClose} className="text-[#5C6472] hover:text-[#EDEFF3]">
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-5">
+          <div>
+            <label className="font-mono text-[10px] uppercase tracking-widest text-[#5C6472]">Titre</label>
+            <input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Ex. Support de téléphone articulé"
+              className="w-full mt-1.5 bg-[#1A1E26] border border-[#2A2F3A] focus:border-[#5B8DEF] outline-none rounded-sm px-3 py-2.5 text-sm"
+            />
+          </div>
+
+          <div>
+            <label className="font-mono text-[10px] uppercase tracking-widest text-[#5C6472]">Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+              placeholder="Dimensions, réglages d'impression conseillés, matériau…"
+              className="w-full mt-1.5 bg-[#1A1E26] border border-[#2A2F3A] focus:border-[#5B8DEF] outline-none rounded-sm px-3 py-2.5 text-sm resize-none"
+            />
+          </div>
+
+          <div>
+            <label className="font-mono text-[10px] uppercase tracking-widest text-[#5C6472]">
+              Fichier 3D (.stl, .obj, .3mf…)
+            </label>
+            <input ref={fileInputRef} type="file" className="hidden" onChange={(e) => handleModelFile(e.target.files?.[0])} />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="mt-1.5 w-full flex items-center justify-center gap-2 border border-dashed border-[#2A2F3A] hover:border-[#5B8DEF] rounded-sm py-3 text-sm text-[#8B93A1] transition-colors"
+            >
+              <FileBox size={15} />
+              {modelFile ? `${modelFile.name} · ${formatBytes(modelFile.size)}` : "Choisir un fichier"}
+            </button>
+          </div>
+
+          <div>
+            <label className="font-mono text-[10px] uppercase tracking-widest text-[#5C6472]">Images (jusqu'à 5)</label>
+            <input
+              ref={imgInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              onChange={(e) => handleImages(e.target.files)}
+            />
+            <div className="mt-1.5 flex flex-wrap gap-2">
+              {imagePreviews.map((src, i) => (
+                <div key={i} className="relative w-16 h-16 rounded-sm overflow-hidden border border-[#2A2F3A]">
+                  <img src={src} alt="" className="w-full h-full object-cover" />
+                  <button onClick={() => removeImage(i)} className="absolute top-0.5 right-0.5 bg-black/60 rounded-sm p-0.5">
+                    <X size={10} />
+                  </button>
+                </div>
+              ))}
+              {imagePreviews.length < 5 && (
+                <button
+                  onClick={() => imgInputRef.current?.click()}
+                  className="w-16 h-16 flex items-center justify-center border border-dashed border-[#2A2F3A] hover:border-[#5B8DEF] rounded-sm text-[#5C6472] transition-colors"
+                >
+                  <ImagePlus size={16} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {err && (
+            <div className="flex items-center gap-2 text-xs text-[#FF9B6B]">
+              <AlertCircle size={13} />
+              {err}
+            </div>
+          )}
+
+          <button
+            onClick={submit}
+            disabled={saving}
+            className="w-full flex items-center justify-center gap-2 bg-[#FF7A33] hover:bg-[#FF8F52] disabled:opacity-60 text-[#14171C] font-semibold text-sm py-3 rounded-sm transition-colors"
+          >
+            {saving ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} strokeWidth={2.5} />}
+            {saving ? "Publication…" : "Publier"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+      }
